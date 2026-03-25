@@ -1,0 +1,1956 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestio — O Sistema Mais Completo do Brasil para Gestão de Imóveis</title>
+  <meta name="description" content="Controle total dos seus imóveis, finanças e operações em um único lugar. Automatize cobranças, elimine planilhas e acompanhe tudo em tempo real.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --white: #ffffff;
+      --off-white: #f8fafb;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --black: #0a0a0a;
+      --emerald-400: #34d399;
+      --emerald-500: #10b981;
+      --emerald-600: #059669;
+      --emerald-700: #047857;
+      --radius: 16px;
+      --radius-lg: 24px;
+      --radius-xl: 32px;
+      --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+      --shadow-md: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 12px 40px rgba(0,0,0,0.08);
+      --shadow-xl: 0 25px 80px rgba(0,0,0,0.10);
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-slow: 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--gray-700);
+      background: var(--white);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+    .container-lg { max-width: 1400px; margin: 0 auto; padding: 0 24px; }
+
+    /* ═══════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════ */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 20px 0;
+      transition: var(--transition);
+    }
+    .navbar.scrolled {
+      padding: 12px 0;
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
+    }
+    .navbar-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+    }
+    .navbar-logo {
+      font-size: 22px; font-weight: 800; color: var(--black);
+      text-decoration: none; letter-spacing: -0.5px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .navbar-logo .logo-dot {
+      width: 8px; height: 8px; background: var(--emerald-500);
+      border-radius: 50%; display: inline-block;
+    }
+    .navbar-links { display: flex; align-items: center; gap: 32px; list-style: none; }
+    .navbar-links a {
+      font-size: 14px; font-weight: 500; color: var(--gray-800);
+      text-decoration: none; transition: var(--transition);
+    }
+    .navbar-links a:hover { color: var(--black); }
+    .navbar-cta {
+      font-size: 14px; font-weight: 600; color: var(--white);
+      background: var(--black); border: none; padding: 10px 24px;
+      border-radius: 100px; cursor: pointer; text-decoration: none;
+      transition: var(--transition);
+    }
+    .navbar-cta:hover { background: var(--gray-800); transform: translateY(-1px); }
+    .navbar .navbar-logo,
+    .navbar .navbar-links li,
+    .navbar .navbar-cta {
+      opacity: 0;
+      transform: translateX(-10px);
+      filter: blur(2px);
+      animation: navItemIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    .navbar .navbar-logo { animation-delay: 0.20s; }
+    .navbar .navbar-links li:nth-child(1) { animation-delay: 0.40s; }
+    .navbar .navbar-links li:nth-child(2) { animation-delay: 0.60s; }
+    .navbar .navbar-links li:nth-child(3) { animation-delay: 0.80s; }
+    .navbar .navbar-links li:nth-child(4) { animation-delay: 1s; }
+    .navbar .navbar-cta { animation-delay: 1.2s; }
+
+    @keyframes navItemIn {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+      }
+    }
+
+    @keyframes mobileHamburgerIn {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+        filter: blur(2px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+      }
+    }
+
+    .mobile-toggle {
+      display: none; background: none; border: none; cursor: pointer;
+      width: 32px; height: 32px; position: relative;
+    }
+    .mobile-toggle span {
+      display: block; width: 20px; height: 2px; background: var(--black);
+      position: absolute; left: 6px; transition: var(--transition);
+    }
+    .mobile-toggle span:nth-child(1) { top: 10px; }
+    .mobile-toggle span:nth-child(2) { top: 15px; }
+    .mobile-toggle span:nth-child(3) { top: 20px; }
+
+    /* ═══════════════════════════════════════════
+       HERO SECTION — CINEMATIC REDESIGN
+    ═══════════════════════════════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      padding: 132px 0 72px;
+      overflow: hidden;
+      background: #f3f7f5;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .hero-bg-photo {
+      position: absolute;
+      inset: 0;
+      background-image: url("/assets/Gemini_Generated_Image_xgt6p6xgt6p6xgt6-B_NBM2AY.png");
+      background-size: cover;
+      background-position: center 27%;
+      transform: scale(1.05);
+      filter: saturate(1.04) contrast(1.04);
+      animation: heroPhotoIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s,
+                 heroAmbientFloat 12s ease-in-out infinite 1.8s;
+      will-change: transform;
+    }
+    .hero-bg-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,0.80) 0%, rgba(255,255,255,0.72) 30%, rgba(255,255,255,0.55) 48%, rgba(255,255,255,0.28) 62%, rgba(255,255,255,0) 78%),
+        linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0.04) 55%, rgba(255,255,255,0.2) 100%);
+    }
+    .hero-bg-vignette {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 78% 32%, rgba(255,255,255,0.16), transparent 44%);
+      mix-blend-mode: screen;
+    }
+    .hero-bg-grid {
+      display: none;
+    }
+    .hero-bg-grain {
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.95' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+      opacity: 0.15;
+      mix-blend-mode: multiply;
+    }
+    .hero-light-rays {
+      position: absolute;
+      top: -30%;
+      right: -10%;
+      width: 68%;
+      height: 130%;
+      opacity: 0;
+      background: conic-gradient(from 160deg at 55% 18%, transparent 0deg, rgba(255,255,255,0.28) 25deg, transparent 40deg, transparent 300deg, rgba(255,255,255,0.2) 330deg, transparent 360deg);
+      filter: blur(16px);
+      animation: heroFadeIn 1.8s ease forwards 0.6s;
+    }
+    .hero-glow {
+      position: absolute;
+      right: 8%;
+      top: 8%;
+      width: 620px;
+      height: 620px;
+      border-radius: 50%;
+      filter: blur(130px);
+      background: radial-gradient(circle, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.06) 45%, transparent 70%);
+      opacity: 0;
+      animation: heroFadeIn 1.4s ease forwards 0.8s;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      min-height: calc(100vh - 260px);
+    }
+    .hero-content {
+      max-width: 640px;
+      position: relative;
+      z-index: 20;
+      isolation: isolate;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 18px 7px 10px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.58);
+      backdrop-filter: blur(12px) saturate(140%);
+      -webkit-backdrop-filter: blur(12px) saturate(140%);
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 2px 8px rgba(15,23,42,0.06);
+      color: var(--gray-700);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      margin-bottom: 28px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: heroFadeSlide 0.7s ease forwards 0.35s;
+    }
+    .hero-badge .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald-500);
+      box-shadow: 0 0 0 4px rgba(16,185,129,0.15);
+      animation: badgePulse 2.2s ease-in-out infinite;
+    }
+
+    .hero-title {
+      position: relative;
+      z-index: 30;
+      font-size: clamp(44px, 7.2vw, 82px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.045em;
+      color: #0b111b;
+      margin-bottom: 22px;
+      text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+      min-height: 3.15em;
+    }
+    .hero-title .typed-text {
+      position: relative;
+      z-index: 31;
+      display: inline;
+    }
+    .hero-title .typed-cursor {
+      display: inline-block;
+      width: 3px;
+      margin-left: 4px;
+      background: #10b981;
+      animation: cursorBlink 0.7s step-end infinite;
+      vertical-align: baseline;
+      height: 0.85em;
+    }
+    .hero-title .highlight {
+      background: linear-gradient(135deg, #0f172a 0%, #136c57 48%, #10b981 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .hero-subtitle {
+      font-size: clamp(16px, 1.5vw, 21px);
+      color: rgba(31,41,55,0.78);
+      line-height: 1.6;
+      max-width: 44ch;
+      margin-bottom: 36px;
+      text-shadow: 0 1px 3px rgba(255,255,255,0.5);
+      opacity: 0;
+      transform: translateY(18px);
+      animation: heroFadeSlide 0.8s ease forwards 0.88s;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      opacity: 0;
+      transform: translateY(18px);
+      animation: heroFadeSlide 0.8s ease forwards 1.04s;
+    }
+
+    .hero-microcopy {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(15,23,42,0.85);
+      text-shadow: 0 1px 3px rgba(255,255,255,0.5);
+      opacity: 0;
+      transform: translateY(14px);
+      animation: heroFadeSlide 0.8s ease forwards 1.18s;
+    }
+
+    .hero-metrics {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      gap: 12px;
+      z-index: 3;
+    }
+    .hero-metric {
+      min-width: 155px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 10px 32px rgba(15,23,42,0.12);
+      backdrop-filter: blur(16px) saturate(150%);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
+      opacity: 0;
+      transform: translateY(14px);
+      animation: heroFadeSlide 0.7s ease forwards, heroMetricFloat 6s ease-in-out infinite;
+    }
+    .hero-metric:nth-child(1) { animation-delay: 1.28s, 2.2s; }
+    .hero-metric:nth-child(2) { animation-delay: 1.42s, 2.5s; }
+    .hero-metric-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: rgba(55,65,81,0.7);
+      margin-bottom: 5px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+    .hero-metric-value {
+      display: block;
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: #0f172a;
+      line-height: 1;
+    }
+
+    @keyframes heroWordIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes heroFadeSlide {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes btnMobileInX {
+      from {
+        opacity: 0;
+        transform: translateX(-42px);
+        filter: blur(2px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+      }
+    }
+    @keyframes heroPhotoIn {
+      from { transform: scale(1.1); }
+      to { transform: scale(1.05); }
+    }
+    @keyframes heroFadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes badgePulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.2); opacity: 0.74; }
+    }
+    @keyframes heroAmbientFloat {
+      0%, 100% { transform: scale(1.05) translateY(0); }
+      50% { transform: scale(1.07) translateY(-10px); }
+    }
+    @keyframes heroMetricFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit; font-size: 15px; font-weight: 600;
+      padding: 14px 30px; border-radius: 100px; border: none;
+      cursor: pointer; text-decoration: none;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                  background-color 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                  border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn-primary {
+      background: var(--black); color: var(--white);
+      box-shadow: 0 8px 26px rgba(15,23,42,0.24);
+    }
+    .btn-primary:hover {
+      background: #101827;
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 16px 36px rgba(15,23,42,0.28);
+    }
+    .btn-secondary {
+      background: rgba(255,255,255,0.82); color: #111827;
+      border: 1px solid rgba(255,255,255,0.95);
+      box-shadow: 0 4px 16px rgba(15,23,42,0.1);
+    }
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.96);
+      border-color: rgba(255,255,255,1);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(15,23,42,0.14);
+    }
+    .btn-emerald {
+      background: var(--emerald-500); color: var(--white);
+      box-shadow: 0 4px 14px rgba(16,185,129,0.3);
+    }
+    .btn-emerald:hover {
+      background: var(--emerald-600);
+      box-shadow: 0 8px 24px rgba(16,185,129,0.4);
+      transform: translateY(-2px);
+    }
+
+    /* ═══════════════════════════════════════════
+       SOCIAL PROOF BAR
+    ═══════════════════════════════════════════ */
+    .social-proof {
+      padding: 64px 0;
+      border-top: 1px solid var(--gray-100);
+      border-bottom: 1px solid var(--gray-100);
+      background: var(--gray-50);
+    }
+    .social-proof-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+    .proof-item {
+      opacity: 0; transform: translateY(20px);
+    }
+    .proof-number {
+      font-size: 36px; font-weight: 800; color: var(--black);
+      letter-spacing: -1px; display: block;
+    }
+    .proof-label {
+      font-size: 14px; color: var(--gray-500); font-weight: 500;
+      margin-top: 4px;
+    }
+
+    /* ═══════════════════════════════════════════
+       SECTION SHARED STYLES
+    ═══════════════════════════════════════════ */
+    .section { padding: 120px 0; position: relative; }
+    .section-dark { background: var(--black); color: var(--white); }
+    .section-gray { background: var(--gray-50); }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 72px;
+    }
+    .section-label {
+      font-size: 13px; font-weight: 700; color: var(--emerald-500);
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 16px; display: block;
+    }
+    .section-dark .section-label { color: var(--emerald-400); }
+
+    .section-title {
+      font-size: clamp(32px, 3.5vw, 48px);
+      font-weight: 800; color: var(--black);
+      line-height: 1.1; letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .section-dark .section-title { color: var(--white); }
+
+    .section-desc {
+      font-size: 17px; color: var(--gray-500);
+      line-height: 1.7;
+    }
+    .section-dark .section-desc { color: rgba(255,255,255,0.5); }
+
+    /* Feature Row — alternating image + text */
+    .feature-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .feature-row.reverse .feature-text { order: 2; }
+    .feature-row.reverse .feature-visual { order: 1; }
+
+    .feature-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 700; color: var(--emerald-600);
+      text-transform: uppercase; letter-spacing: 1.5px;
+      margin-bottom: 20px;
+    }
+    .section-dark .feature-tag { color: var(--emerald-400); }
+    .feature-text h2 {
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 800; color: var(--black);
+      line-height: 1.15; letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .section-dark .feature-text h2 { color: var(--white); }
+    .feature-text p {
+      font-size: 16px; color: var(--gray-500);
+      line-height: 1.7; margin-bottom: 32px;
+    }
+    .section-dark .feature-text p { color: rgba(255,255,255,0.5); }
+
+    .feature-list {
+      list-style: none; display: flex; flex-direction: column; gap: 14px;
+    }
+    .feature-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 15px; color: var(--gray-600); font-weight: 500;
+    }
+    .section-dark .feature-list li { color: rgba(255,255,255,0.7); }
+    .feature-list .check {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: rgba(16,185,129,0.1); color: var(--emerald-500);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; flex-shrink: 0; margin-top: 2px;
+    }
+
+    .feature-visual {
+      position: relative;
+    }
+    .feature-image {
+      width: 100%; border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+    }
+    .section-dark .feature-image {
+      box-shadow: 0 25px 80px rgba(0,0,0,0.4);
+    }
+
+    /* Feature image float card accents */
+    .feature-visual .accent-card {
+      position: absolute;
+      background: var(--white);
+      border-radius: 14px;
+      padding: 14px 18px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      font-size: 13px; font-weight: 600;
+      z-index: 5;
+    }
+    .section-dark .feature-visual .accent-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: var(--white);
+    }
+
+    /* ═══════════════════════════════════════════
+       FEATURES GRID
+    ═══════════════════════════════════════════ */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--gray-100);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: default;
+    }
+    .feature-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: transparent;
+    }
+    .feature-card-icon {
+      width: 52px; height: 52px;
+      background: linear-gradient(135deg, rgba(16,185,129,0.1), rgba(16,185,129,0.05));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .feature-card h3 {
+      font-size: 17px; font-weight: 700; color: var(--black);
+      margin-bottom: 10px;
+    }
+    .feature-card p {
+      font-size: 14px; color: var(--gray-500);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════
+       TESTIMONIALS
+    ═══════════════════════════════════════════ */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testimonial-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      transition: all 0.4s ease;
+    }
+    .testimonial-card:hover {
+      background: rgba(255,255,255,0.07);
+      border-color: rgba(255,255,255,0.12);
+      transform: translateY(-4px);
+    }
+    .testimonial-stars {
+      color: #fbbf24;
+      font-size: 16px;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+    }
+    .testimonial-text {
+      font-size: 15px;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.7;
+      margin-bottom: 24px;
+      font-style: italic;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .testimonial-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--emerald-500), var(--emerald-700));
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-weight: 700; font-size: 16px;
+    }
+    .testimonial-name {
+      font-size: 14px; font-weight: 700; color: var(--white);
+    }
+    .testimonial-role {
+      font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 2px;
+    }
+
+    /* ═══════════════════════════════════════════
+       PRICING
+    ═══════════════════════════════════════════ */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .pricing-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      transition: all 0.4s ease;
+      position: relative;
+    }
+    .pricing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+    .pricing-card.popular {
+      border-color: var(--emerald-500);
+      box-shadow: 0 0 0 1px var(--emerald-500), var(--shadow-lg);
+    }
+    .pricing-card.popular::before {
+      content: 'Mais popular';
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--emerald-500); color: var(--white);
+      font-size: 12px; font-weight: 700; padding: 4px 16px;
+      border-radius: 100px;
+    }
+    .pricing-plan {
+      font-size: 16px; font-weight: 700; color: var(--black);
+      margin-bottom: 8px;
+    }
+    .pricing-desc {
+      font-size: 13px; color: var(--gray-500);
+      margin-bottom: 24px;
+    }
+    .pricing-price {
+      display: flex; align-items: baseline; gap: 4px;
+      margin-bottom: 32px;
+    }
+    .pricing-currency {
+      font-size: 18px; font-weight: 700; color: var(--gray-400);
+    }
+    .pricing-amount {
+      font-size: 48px; font-weight: 900; color: var(--black);
+      letter-spacing: -2px; line-height: 1;
+    }
+    .pricing-period {
+      font-size: 14px; color: var(--gray-400); font-weight: 500;
+    }
+    .pricing-features {
+      list-style: none; display: flex; flex-direction: column;
+      gap: 12px; margin-bottom: 32px;
+    }
+    .pricing-features li {
+      font-size: 14px; color: var(--gray-600); font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .pricing-features .pf-check {
+      color: var(--emerald-500); font-size: 16px; font-weight: 700;
+    }
+    .pricing-btn {
+      width: 100%; text-align: center; justify-content: center;
+    }
+
+    /* ═══════════════════════════════════════════
+       FAQ
+    ═══════════════════════════════════════════ */
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .faq-item {
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .faq-item:hover { border-color: var(--gray-300); }
+    .faq-item.active { border-color: var(--emerald-500); }
+    .faq-question {
+      width: 100%; background: none; border: none;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 28px;
+      font-family: inherit; font-size: 16px; font-weight: 600;
+      color: var(--black); cursor: pointer;
+      text-align: left;
+    }
+    .faq-question .faq-icon {
+      width: 28px; height: 28px;
+      border-radius: 50%; background: var(--gray-100);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: var(--gray-500);
+      transition: var(--transition); flex-shrink: 0;
+    }
+    .faq-item.active .faq-icon {
+      background: var(--emerald-500); color: var(--white);
+      transform: rotate(45deg);
+    }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .faq-item.active .faq-answer { max-height: 200px; }
+    .faq-answer p {
+      padding: 0 28px 22px;
+      font-size: 15px; color: var(--gray-500);
+      line-height: 1.7;
+    }
+
+    /* ═══════════════════════════════════════════
+       CTA FINAL
+    ═══════════════════════════════════════════ */
+    .cta-final {
+      position: relative;
+      padding: 120px 0;
+      background: var(--black);
+      overflow: hidden;
+      text-align: center;
+    }
+    .cta-final-bg {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+    .cta-final-bg .cta-orb {
+      position: absolute; border-radius: 50%;
+      filter: blur(100px);
+    }
+    .cta-final-bg .cta-orb-1 {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(16,185,129,0.2), transparent 70%);
+      top: -200px; left: 50%; transform: translateX(-50%);
+    }
+    .cta-final-bg .cta-orb-2 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(59,130,246,0.1), transparent 70%);
+      bottom: -100px; right: 10%;
+    }
+    .cta-final .container { position: relative; z-index: 2; }
+    .cta-final h2 {
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 900; color: var(--white);
+      line-height: 1.1; letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    .cta-final p {
+      font-size: 18px; color: rgba(255,255,255,0.5);
+      margin-bottom: 40px;
+      max-width: 500px; margin-left: auto; margin-right: auto;
+    }
+    .cta-final-image {
+      margin-top: 64px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+      max-width: 900px;
+      margin-left: auto; margin-right: auto;
+    }
+    .cta-final-image img {
+      width: 100%; display: block;
+    }
+
+    /* ═══════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════ */
+    .footer {
+      background: var(--black);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 64px 0 32px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand .navbar-logo { color: var(--white); margin-bottom: 16px; }
+    .footer-brand p {
+      font-size: 14px; color: rgba(255,255,255,0.4);
+      line-height: 1.7;
+    }
+    .footer-col h4 {
+      font-size: 13px; font-weight: 700; color: rgba(255,255,255,0.5);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+    .footer-col a {
+      font-size: 14px; color: rgba(255,255,255,0.5);
+      text-decoration: none; transition: var(--transition);
+    }
+    .footer-col a:hover { color: var(--white); }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding-top: 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; color: rgba(255,255,255,0.3);
+    }
+
+    /* ═══════════════════════════════════════════
+       SCROLL ANIMATIONS
+    ═══════════════════════════════════════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-scale {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-scale.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .reveal-left {
+      opacity: 0;
+      transform: translateX(-40px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .reveal-right {
+      opacity: 0;
+      transform: translateX(40px);
+      transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .stagger-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .stagger-item.visible { opacity: 1; transform: translateY(0); }
+
+    /* Parallax container */
+    .parallax-img { transition: transform 0.1s linear; will-change: transform; }
+
+    /* ═══════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .feature-row { grid-template-columns: 1fr; gap: 48px; }
+      .feature-row.reverse .feature-text { order: 1; }
+      .feature-row.reverse .feature-visual { order: 2; }
+      .features-grid { grid-template-columns: repeat(2, 1fr); }
+      .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+      .pricing-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .hero-content { max-width: 560px; }
+      .hero-metrics { right: 24px; bottom: 28px; }
+    }
+
+    @media (max-width: 768px) {
+      .section { padding: 80px 0; }
+      .section-header { margin-bottom: 48px; }
+
+      .navbar-links { display: none; }
+      .navbar-cta { display: none; }
+      .mobile-toggle { display: block; }
+      .navbar .mobile-toggle {
+        opacity: 0;
+        transform: translateX(-10px);
+        filter: blur(2px);
+        animation: none;
+      }
+      .navbar .navbar-logo {
+        opacity: 0;
+        transform: translateX(-10px);
+        filter: blur(2px);
+        animation: none;
+      }
+
+      .hero { padding: 108px 0 56px; min-height: 92vh; }
+      .hero-inner { min-height: calc(92vh - 64px); }
+      .hero-content { max-width: 100%; }
+      .hero-ctas { flex-direction: column; margin-top: 48px; }
+      .hero-title { margin-top: 198px; }
+      .hero-ctas {
+        opacity: 1;
+        transform: none;
+        animation: none;
+      }
+      .hero-ctas .btn {
+        width: 100%;
+        justify-content: center;
+        opacity: 0;
+        transform: translateX(-42px);
+        filter: blur(2px);
+        will-change: transform, opacity;
+      }
+      .hero-ctas .btn-primary {
+        animation: none;
+      }
+      .hero-ctas .btn-secondary {
+        animation: none;
+      }
+
+      /* No mobile: nome e hamburger fixos (sem animação) */
+      .navbar .navbar-logo {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+        animation: none;
+      }
+      .navbar .mobile-toggle {
+        opacity: 1;
+        transform: translateX(0);
+        filter: blur(0);
+        animation: none;
+      }
+      body.hero-typed-first-complete .hero-ctas .btn-primary {
+        animation: btnMobileInX 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      }
+      body.hero-typed-first-complete .hero-ctas .btn-secondary {
+        animation: btnMobileInX 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        animation-delay: 0.35s;
+      }
+      .hero-metrics { display: none; }
+      #funcionalidades .section-header { display: none; }
+
+      .social-proof-grid { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+
+      .features-grid { grid-template-columns: 1fr; }
+      .testimonials-grid { grid-template-columns: 1fr; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* ═══════════════════════════════════════════
+       STICKY FEATURE SECTION
+    ═══════════════════════════════════════════ */
+    .sticky-features {
+      padding: 0;
+    }
+    .sticky-features-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+    .sticky-visual {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: var(--gray-50);
+    }
+    .sticky-visual img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-xl);
+      transition: opacity 0.6s ease;
+    }
+    .sticky-text-track {
+      padding: 0;
+    }
+    .sticky-text-block {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 60px;
+    }
+    .sticky-text-block h3 {
+      font-size: clamp(24px, 2.5vw, 36px);
+      font-weight: 800;
+      color: var(--black);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .sticky-text-block p {
+      font-size: 16px;
+      color: var(--gray-500);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .sticky-features-inner { grid-template-columns: 1fr; }
+      .sticky-visual { position: relative; height: auto; min-height: 50vh; }
+      .sticky-text-block { min-height: auto; padding: 60px 24px; }
+    }
+
+    /* Smooth number counter */
+    .counter { font-variant-numeric: tabular-nums; }
+  </style>
+</head>
+<body>
+
+  <!-- ════════════════ NAVBAR ════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <a href="#" class="navbar-logo">
+        <span class="logo-dot"></span>gest.ia
+      </a>
+      <ul class="navbar-links">
+        <li><a href="#funcionalidades">Funcionalidades</a></li>
+        <li><a href="#planos">Planos</a></li>
+        <li><a href="#depoimentos">Depoimentos</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <a href="#planos" class="navbar-cta">Testar grátis</a>
+      <button class="mobile-toggle" id="mobileToggle" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ════════════════ HERO ════════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <div class="hero-bg-photo parallax-img"></div>
+      <div class="hero-bg-overlay"></div>
+      <div class="hero-bg-vignette"></div>
+      <div class="hero-bg-grid"></div>
+      <div class="hero-light-rays"></div>
+      <div class="hero-glow"></div>
+      <div class="hero-bg-grain"></div>
+    </div>
+
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="typed-text" id="heroTyped"></span><span class="typed-cursor" id="heroCursor"></span>
+          </h1>
+
+          <div class="hero-ctas">
+            <a href="https://wa.me/5548988369079?text=Ola%21%20Vim%20pelo%20site%20e%20quero%20uma%20demonstracao%20da%20plataforma%20de%20gestao%20imobiliaria." class="btn btn-primary" target="_blank" rel="noopener noreferrer">Começar agora</a>
+            <a href="https://wa.me/5548988369079?text=Ola%21%20Vim%20pelo%20site%20e%20quero%20uma%20demonstracao%20da%20plataforma%20de%20gestao%20imobiliaria." class="btn btn-secondary" target="_blank" rel="noopener noreferrer">Ver demonstração</a>
+          </div>
+
+
+        </div>
+
+        <div class="hero-metrics">
+          <div class="hero-metric">
+            <span class="hero-metric-label">Receita/mês</span>
+            <span class="hero-metric-value">+42%</span>
+          </div>
+          <div class="hero-metric">
+            <span class="hero-metric-label">Inadimplência</span>
+            <span class="hero-metric-value">-61%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ════════════════ VISÃO GERAL ════════════════ -->
+  <section class="section" id="funcionalidades">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Visão Geral</span>
+        <h2 class="section-title">Controle total do seu negócio imobiliário</h2>
+        <p class="section-desc">Gestão centralizada e inteligente de imóveis, com controle absoluto sobre finanças, moradores e operação.</p>
+      </div>
+
+      <div class="feature-row">
+        <div class="feature-text reveal-left">
+          <span class="feature-tag">✦ Plataforma completa</span>
+          <h2>Uma plataforma que transforma sua gestão</h2>
+          <p>Centralize dashboards estratégicos, controle de pagamentos, gestão de inadimplência, CRM e notificações inteligentes em um único sistema.</p>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> Dashboards estratégicos em tempo real</li>
+            <li><span class="check">✓</span> Controle de pagamentos automatizado</li>
+            <li><span class="check">✓</span> Gestão de inadimplência com alertas</li>
+            <li><span class="check">✓</span> CRM integrado para moradores</li>
+            <li><span class="check">✓</span> Relatórios automatizados</li>
+          </ul>
+        </div>
+        <div class="feature-visual reveal-scale">
+          <img
+            src="/assets/Gemini_Generated_Image_ln3ah8ln3ah8ln3a-BJj7GJ5Y.png"
+            alt="Proprietário visualizando dashboard de gestão"
+            class="feature-image parallax-img"
+            loading="lazy"
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ GESTÃO DE PAGAMENTOS ════════════════ -->
+  <section class="section section-gray">
+    <div class="container">
+      <div class="feature-row reverse">
+        <div class="feature-text reveal-right">
+          <span class="feature-tag">💰 Core do Sistema</span>
+          <h2>Chega de planilhas. Controle financeiro automatizado.</h2>
+          <p>Registre pagamentos, controle parcelas e tenha visibilidade total do seu fluxo de caixa. Tudo automático, tudo em tempo real.</p>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> Registro e histórico de pagamentos</li>
+            <li><span class="check">✓</span> Controle de parcelas e vencimentos</li>
+            <li><span class="check">✓</span> Status em tempo real: pago, atrasado, pendente</li>
+            <li><span class="check">✓</span> Cobrança automática via WhatsApp e e-mail</li>
+            <li><span class="check">✓</span> Fluxo de caixa claro e detalhado</li>
+          </ul>
+        </div>
+        <div class="feature-visual reveal-scale">
+          <img
+            src="/assets/Gemini_Generated_Image_fk8gevfk8gevfk8g-BX1pf4V8.png"
+            alt="Visualização do app de pagamentos no celular"
+            class="feature-image parallax-img"
+            loading="lazy"
+          >
+          <div class="accent-card" style="bottom: -16px; left: -16px; display: flex; align-items: center; gap: 10px;">
+            <span style="color:var(--emerald-500); font-size:20px; font-weight:800;">↓ 73%</span>
+            <span style="font-size:12px; color:var(--gray-500);">Menos erros<br>financeiros</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ INADIMPLÊNCIA ════════════════ -->
+  <section class="section section-dark">
+    <div class="container">
+      <div class="feature-row">
+        <div class="feature-text reveal-left">
+          <span class="feature-tag">🚨 Inadimplência</span>
+          <h2>Nunca mais perca dinheiro por falta de controle</h2>
+          <p>Identifique devedores, priorize por impacto financeiro e atue rapidamente com alertas automáticos e ranking inteligente.</p>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> Ranking de devedores por impacto</li>
+            <li><span class="check">✓</span> Valores em aberto consolidados</li>
+            <li><span class="check">✓</span> Alertas automáticos de atraso</li>
+            <li><span class="check">✓</span> Priorização por impacto financeiro</li>
+            <li><span class="check">✓</span> Histórico completo de inadimplência</li>
+          </ul>
+        </div>
+        <div class="feature-visual reveal-scale">
+          <img
+            src="/assets/Gemini_Generated_Image_5vkn1f5vkn1f5vkn-B8VCXqZf.png"
+            alt="Gestão de inadimplência no dashboard"
+            class="feature-image parallax-img"
+            loading="lazy"
+          >
+          <div class="accent-card" style="top: -16px; right: -16px; display: flex; align-items: center; gap: 10px;">
+            <span style="color:var(--emerald-400); font-size:20px; font-weight:800;">↓ 61%</span>
+            <span style="font-size:12px;">Redução na<br>inadimplência</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ STICKY FEATURE SHOWCASE ════════════════ -->
+  <section class="sticky-features">
+    <div class="sticky-features-inner">
+      <div class="sticky-visual">
+        <img
+          src="/assets/Gemini_Generated_Image_hlhcj3hlhcj3hlhc-DDeDQT1u.png"
+          alt="Dashboard de gestão completa"
+          class="parallax-img"
+          loading="lazy"
+          id="stickyImage"
+        >
+      </div>
+      <div class="sticky-text-track">
+        <div class="sticky-text-block reveal">
+          <span class="feature-tag">🧾 Condomínio</span>
+          <h3>Transparência total para você e seus moradores</h3>
+          <p>Registre gastos, classifique despesas, faça rateio automático e ofereça um painel completo para cada morador. Mais confiança, menos conflito.</p>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> Registro e classificação de despesas</li>
+            <li><span class="check">✓</span> Rateio automático entre moradores</li>
+            <li><span class="check">✓</span> Painel financeiro do morador</li>
+            <li><span class="check">✓</span> Histórico completo de gastos</li>
+          </ul>
+        </div>
+        <div class="sticky-text-block reveal">
+          <span class="feature-tag">🏗️ Obras</span>
+          <h3>Administração completa de obras e reformas</h3>
+          <p>Planeje, controle custos, acompanhe o progresso e gerencie fornecedores. Menos desperdício, mais previsibilidade.</p>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> Planejamento e cronograma</li>
+            <li><span class="check">✓</span> Controle de custos por obra</li>
+            <li><span class="check">✓</span> Acompanhamento de progresso</li>
+            <li><span class="check">✓</span> Gestão de fornecedores</li>
+          </ul>
+        </div>
+        <div class="sticky-text-block reveal">
+          <span class="feature-tag">🤖 Automação</span>
+          <h3>Um sistema que trabalha por você</h3>
+          <p>Cobranças automáticas, alertas inteligentes e insights do negócio. O Gestio cuida das tarefas repetitivas para você focar no que importa.</p>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> Cobrança automática via WhatsApp</li>
+            <li><span class="check">✓</span> Alertas de atraso em tempo real</li>
+            <li><span class="check">✓</span> Insights e recomendações automáticas</li>
+            <li><span class="check">✓</span> Notificações inteligentes</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ PAINEL DO MORADOR ════════════════ -->
+  <section class="section">
+    <div class="container">
+      <div class="feature-row reverse">
+        <div class="feature-text reveal-right">
+          <span class="feature-tag">👤 Diferencial</span>
+          <h2>Transparência que reduz conflitos</h2>
+          <p>Ofereça aos seus moradores um painel completo para pagar aluguel, visualizar despesas do condomínio e solicitar manutenção. Mais confiança, mais retenção, menos atrito.</p>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> Pagamento de aluguel online</li>
+            <li><span class="check">✓</span> Visualização de despesas</li>
+            <li><span class="check">✓</span> Solicitação de manutenção</li>
+            <li><span class="check">✓</span> Comunicação direta com proprietário</li>
+          </ul>
+        </div>
+        <div class="feature-visual reveal-scale">
+          <img
+            src="/assets/Gemini_Generated_Image_fk8gevfk8gevfk8g%20(1)-DHReDm_6.png"
+            alt="Painel do morador sendo utilizado"
+            class="feature-image parallax-img"
+            loading="lazy"
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ CRM + RELATÓRIOS ════════════════ -->
+  <section class="section section-gray">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Inteligência completa</span>
+        <h2 class="section-title">Relacionamento profissional e relatórios sem esforço</h2>
+        <p class="section-desc">CRM integrado para moradores, histórico de interações, contratos e relatórios completos com lucro, inadimplência e performance.</p>
+      </div>
+
+      <div class="feature-row">
+        <div class="feature-text reveal-left">
+          <span class="feature-tag">🧠 CRM & Relatórios</span>
+          <h2>Relacionamento organizado. Dados claros.</h2>
+          <p>Cadastro completo de moradores, histórico de interações, comunicação centralizada e relatórios mensais que mostram exatamente onde está seu lucro.</p>
+          <ul class="feature-list">
+            <li><span class="check">✓</span> CRM completo de moradores</li>
+            <li><span class="check">✓</span> Histórico de interações e contratos</li>
+            <li><span class="check">✓</span> Relatórios mensais automáticos</li>
+            <li><span class="check">✓</span> Análise de lucro e performance</li>
+            <li><span class="check">✓</span> Comunicação centralizada</li>
+          </ul>
+        </div>
+        <div class="feature-visual reveal-scale">
+          <img
+            src="/assets/Gemini_Generated_Image_v7zucqv7zucqv7zu-BQHH9-Bs.png"
+            alt="Gestão profissional de imóveis"
+            class="feature-image parallax-img"
+            loading="lazy"
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ FEATURES GRID ════════════════ -->
+  <section class="section" id="todas-funcionalidades">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Tudo que você precisa</span>
+        <h2 class="section-title">Um sistema completo para cada necessidade</h2>
+        <p class="section-desc">Cada funcionalidade foi projetada para simplificar sua gestão e maximizar seus resultados.</p>
+      </div>
+
+      <div class="features-grid">
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">💳</div>
+          <h3>Pagamentos e cobrança</h3>
+          <p>Automatize cobranças e registre pagamentos com status em tempo real.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">📊</div>
+          <h3>Financeiro</h3>
+          <p>Fluxo de caixa claro, receitas, despesas e lucro sempre atualizados.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">🚨</div>
+          <h3>Inadimplência</h3>
+          <p>Ranking de devedores, alertas automáticos e priorização inteligente.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">🏠</div>
+          <h3>Imóveis e unidades</h3>
+          <p>Cadastro completo de imóveis, unidades, vagas e áreas comuns.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">🔧</div>
+          <h3>Manutenção</h3>
+          <p>Solicitações, acompanhamento e histórico de manutenções.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">🏗️</div>
+          <h3>Obras</h3>
+          <p>Planejamento, custos, progresso e fornecedores em um só lugar.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">🏢</div>
+          <h3>Condomínio</h3>
+          <p>Gastos, rateio, despesas e painel financeiro para moradores.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">💡</div>
+          <h3>Água e luz</h3>
+          <p>Controle individual de consumo com rateio justo e transparente.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">👤</div>
+          <h3>CRM</h3>
+          <p>Cadastro de moradores, histórico de interações e contratos.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">🔔</div>
+          <h3>Notificações</h3>
+          <p>Alertas inteligentes por e-mail, push e WhatsApp automáticos.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">📱</div>
+          <h3>Painel do morador</h3>
+          <p>Acesso para moradores pagarem, consultarem e solicitarem serviços.</p>
+        </div>
+        <div class="feature-card stagger-item">
+          <div class="feature-card-icon">📈</div>
+          <h3>Relatórios</h3>
+          <p>Relatórios mensais de lucro, performance e inadimplência.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ TESTIMONIALS ════════════════ -->
+  <section class="section section-dark" id="depoimentos">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Prova Social</span>
+        <h2 class="section-title">Quem usa, recomenda</h2>
+        <p class="section-desc">Proprietários e administradores que transformaram sua gestão com o Gestio.</p>
+      </div>
+
+      <div class="testimonials-grid">
+        <div class="testimonial-card stagger-item">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Eu gerenciava 32 kitnets com planilhas. Era um caos. Com o Gestio, em uma semana já tinha tudo organizado. A inadimplência caiu 40% em dois meses."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">RM</div>
+            <div>
+              <div class="testimonial-name">Roberto Mendes</div>
+              <div class="testimonial-role">Proprietário — 32 unidades</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card stagger-item">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"O painel do morador foi um diferencial incrível. Os moradores se sentem mais seguros e eu tenho menos conflitos. Recomendo para todos."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">AC</div>
+            <div>
+              <div class="testimonial-name">Ana Cristina</div>
+              <div class="testimonial-role">Administradora — 58 unidades</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card stagger-item">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">"Finalmente sei exatamente quanto lucro por mês. Os relatórios são claros e as cobranças automáticas me economizam horas toda semana."</p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">JP</div>
+            <div>
+              <div class="testimonial-name">João Paulo</div>
+              <div class="testimonial-role">Investidor — 15 unidades</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ PRICING ════════════════ -->
+  <section class="section" id="planos">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Planos</span>
+        <h2 class="section-title">Escolha o plano ideal para você</h2>
+        <p class="section-desc">Comece grátis e escale conforme seu portfólio cresce. Sem surpresas, sem taxas ocultas.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="pricing-card stagger-item">
+          <div class="pricing-plan">Starter</div>
+          <div class="pricing-desc">Para quem está começando com poucos imóveis.</div>
+          <div class="pricing-price">
+            <span class="pricing-currency">R$</span>
+            <span class="pricing-amount">97</span>
+            <span class="pricing-period">/mês</span>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="pf-check">✓</span> Até 10 unidades</li>
+            <li><span class="pf-check">✓</span> Controle de pagamentos</li>
+            <li><span class="pf-check">✓</span> Gestão de inadimplência</li>
+            <li><span class="pf-check">✓</span> Relatórios básicos</li>
+            <li><span class="pf-check">✓</span> Suporte por e-mail</li>
+          </ul>
+          <a href="https://wa.me/5548988369079?text=Ola%21%20Vim%20pelo%20site%20e%20quero%20uma%20demonstracao%20da%20plataforma%20de%20gestao%20imobiliaria." class="btn btn-secondary pricing-btn" target="_blank" rel="noopener noreferrer">Começar grátis</a>
+        </div>
+
+        <div class="pricing-card popular stagger-item">
+          <div class="pricing-plan">Pro</div>
+          <div class="pricing-desc">Para proprietários que querem controle total.</div>
+          <div class="pricing-price">
+            <span class="pricing-currency">R$</span>
+            <span class="pricing-amount">197</span>
+            <span class="pricing-period">/mês</span>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="pf-check">✓</span> Até 50 unidades</li>
+            <li><span class="pf-check">✓</span> Tudo do Starter</li>
+            <li><span class="pf-check">✓</span> Cobrança automática</li>
+            <li><span class="pf-check">✓</span> Painel do morador</li>
+            <li><span class="pf-check">✓</span> CRM integrado</li>
+            <li><span class="pf-check">✓</span> Relatórios avançados</li>
+            <li><span class="pf-check">✓</span> Suporte prioritário</li>
+          </ul>
+          <a href="https://wa.me/5548988369079?text=Ola%21%20Vim%20pelo%20site%20e%20quero%20uma%20demonstracao%20da%20plataforma%20de%20gestao%20imobiliaria." class="btn btn-emerald pricing-btn" target="_blank" rel="noopener noreferrer">Começar grátis</a>
+        </div>
+
+        <div class="pricing-card stagger-item">
+          <div class="pricing-plan">Business</div>
+          <div class="pricing-desc">Para administradoras e grandes portfólios.</div>
+          <div class="pricing-price">
+            <span class="pricing-currency">R$</span>
+            <span class="pricing-amount">397</span>
+            <span class="pricing-period">/mês</span>
+          </div>
+          <ul class="pricing-features">
+            <li><span class="pf-check">✓</span> Unidades ilimitadas</li>
+            <li><span class="pf-check">✓</span> Tudo do Pro</li>
+            <li><span class="pf-check">✓</span> Gestão de obras</li>
+            <li><span class="pf-check">✓</span> Gestão de condomínio</li>
+            <li><span class="pf-check">✓</span> API e integrações</li>
+            <li><span class="pf-check">✓</span> Multi-usuários</li>
+            <li><span class="pf-check">✓</span> Gerente de conta dedicado</li>
+          </ul>
+          <a href="https://wa.me/5548988369079?text=Ola%21%20Vim%20pelo%20site%20e%20quero%20uma%20demonstracao%20da%20plataforma%20de%20gestao%20imobiliaria." class="btn btn-secondary pricing-btn" target="_blank" rel="noopener noreferrer">Falar com vendas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ FAQ ════════════════ -->
+  <section class="section section-gray" id="faq">
+    <div class="container">
+      <div class="section-header reveal">
+        <span class="section-label">Perguntas Frequentes</span>
+        <h2 class="section-title">Tudo que você precisa saber</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            É fácil de usar? Preciso de conhecimento técnico?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>O Gestio foi projetado para ser extremamente simples. Se você sabe usar um celular, sabe usar o Gestio. Nosso onboarding guiado configura tudo em minutos, sem necessidade de conhecimento técnico.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            Realmente substitui minhas planilhas?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Sim. O Gestio foi criado exatamente para isso. Tudo que você faz em planilhas — controle de pagamentos, despesas, moradores — é feito automaticamente no sistema, com mais segurança e zero erros manuais.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            Como funciona o controle de inadimplência?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>O sistema identifica automaticamente atrasos, cria um ranking de devedores por impacto financeiro, envia alertas automáticos e permite que você tome ações rápidas. Clientes reduzem inadimplência em até 60%.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            O sistema mostra meu lucro real?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Sim. Com dashboards financeiros em tempo real, você vê receitas, despesas e lucro líquido por imóvel, por unidade ou consolidado. Relatórios mensais são gerados automaticamente.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            Tem painel para o morador acessar?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Sim. O morador tem acesso ao seu próprio painel onde pode pagar aluguel, ver despesas do condomínio e solicitar manutenção. Isso aumenta confiança e reduz conflitos.</p>
+          </div>
+        </div>
+        <div class="faq-item reveal">
+          <button class="faq-question">
+            Serve para quem tem poucos imóveis?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            <p>Com certeza. O plano Starter é ideal para quem tem até 10 unidades. Quanto antes você organizar sua gestão, melhor. Não importa se são 5 ou 500 unidades — o Gestio se adapta ao seu tamanho.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ CTA FINAL ════════════════ -->
+  <section class="cta-final">
+    <div class="cta-final-bg">
+      <div class="cta-orb cta-orb-1"></div>
+      <div class="cta-orb cta-orb-2"></div>
+    </div>
+    <div class="container">
+      <h2 class="reveal">Pare de perder dinheiro<br>com desorganização</h2>
+      <p class="reveal">Comece agora e veja resultados em menos de uma semana. Teste grátis, sem compromisso.</p>
+      <div class="reveal">
+        <a href="https://wa.me/5548988369079?text=Ola%21%20Vim%20pelo%20site%20e%20quero%20uma%20demonstracao%20da%20plataforma%20de%20gestao%20imobiliaria." class="btn btn-emerald" style="font-size:17px; padding:18px 40px;" target="_blank" rel="noopener noreferrer">Começar teste grátis</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════════════ FOOTER ════════════════ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="navbar-logo">
+            <span class="logo-dot"></span>gest.ia
+          </a>
+          <p>O sistema mais completo do Brasil para gestão de imóveis. Controle total, sem planilhas, sem complicação.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Produto</h4>
+          <ul>
+            <li><a href="#funcionalidades">Funcionalidades</a></li>
+            <li><a href="#planos">Planos</a></li>
+            <li><a href="#depoimentos">Depoimentos</a></li>
+            <li><a href="#">Integrações</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Empresa</h4>
+          <ul>
+            <li><a href="#">Sobre nós</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Carreiras</a></li>
+            <li><a href="#">Contato</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Suporte</h4>
+          <ul>
+            <li><a href="#">Central de ajuda</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#">Termos de uso</a></li>
+            <li><a href="#">Privacidade</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 Gestio. Todos os direitos reservados.</span>
+        <span>Feito com ♥ no Brasil</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ════════════════ JAVASCRIPT ════════════════ -->
+  <script>
+    (function() {
+      'use strict';
+
+      // Hero typewriter effect with cycling phrases
+      (function heroTypewriter() {
+        var el = document.getElementById('heroTyped');
+        var cursor = document.getElementById('heroCursor');
+
+        var firstPhraseDone = false;
+
+        var phrases = [
+          [
+            { text: 'Sua gestão imobiliária ', cls: '' },
+            { text: 'mais inteligente.', cls: 'highlight' }
+          ],
+
+          [
+            { text: 'A forma mais inteligente de ', cls: '' },
+            { text: 'gerenciar seus imóveis.', cls: 'highlight' }
+          ],
+          [
+            { text: 'Gerencie todos os seus imóveis ', cls: '' },
+            { text: 'em um só lugar.', cls: 'highlight' }
+          ]
+        ];
+
+        var typeSpeed = 55;
+        var eraseSpeed = 55;
+        var pauseAfterType = 1800;
+        var pauseAfterTypeFirstPhrase = pauseAfterType; // mantido; a animação mobile será disparada no fim do typing
+        var pauseAfterErase = 400;
+        var startDelay = 600;
+        var phraseIdx = 0;
+        var mobileFirstAnimLeadAfterTyping = 200; // dispara um pouco após terminar o typing (sem mexer no pause)
+
+        function getFullText(parts) {
+          return parts.reduce(function(a, p) { return a + p.text; }, '');
+        }
+
+        function buildHTML(parts, len) {
+          var html = '';
+          var remaining = len;
+          for (var j = 0; j < parts.length; j++) {
+            if (remaining <= 0) break;
+            var chunk = parts[j].text.substring(0, remaining);
+            remaining -= chunk.length;
+            if (parts[j].cls) {
+              html += '<span class="' + parts[j].cls + '">' + chunk + '</span>';
+            } else {
+              html += chunk;
+            }
+          }
+          return html;
+        }
+
+        function typePhrase(parts, cb, cbDelay, onTypedComplete) {
+          var full = getFullText(parts);
+          var i = 0;
+          function step() {
+            i++;
+            el.innerHTML = buildHTML(parts, i);
+            if (i < full.length) {
+              setTimeout(step, typeSpeed);
+            } else {
+              if (typeof onTypedComplete === 'function') onTypedComplete();
+              setTimeout(cb, typeof cbDelay === 'number' ? cbDelay : pauseAfterType);
+            }
+          }
+          step();
+        }
+
+        function erasePhrase(parts, cb) {
+          var full = getFullText(parts);
+          var i = full.length;
+          function step() {
+            i--;
+            el.innerHTML = buildHTML(parts, i);
+            if (i > 0) {
+              setTimeout(step, eraseSpeed);
+            } else {
+              setTimeout(cb, pauseAfterErase);
+            }
+          }
+          step();
+        }
+
+        function cycle() {
+          var parts = phrases[phraseIdx];
+          typePhrase(parts, function() {
+            erasePhrase(parts, function() {
+              phraseIdx = (phraseIdx + 1) % phrases.length;
+              cycle();
+            });
+          }, undefined, phraseIdx === 0 ? function() {
+            if (!firstPhraseDone) {
+              firstPhraseDone = true;
+              setTimeout(function() {
+                document.body.classList.add('hero-typed-first-complete');
+              }, mobileFirstAnimLeadAfterTyping);
+            }
+          } : undefined);
+        }
+
+        setTimeout(cycle, startDelay);
+      })();
+
+      // Navbar scroll effect
+      const navbar = document.getElementById('navbar');
+      let lastScroll = 0;
+
+      function handleNavScroll() {
+        const scrollY = window.scrollY;
+        navbar.classList.toggle('scrolled', scrollY > 50);
+        lastScroll = scrollY;
+      }
+      window.addEventListener('scroll', handleNavScroll, { passive: true });
+
+      // Intersection Observer for reveal animations
+      const revealElements = document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right');
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+      revealElements.forEach(el => revealObserver.observe(el));
+
+      // Stagger animations
+      const staggerContainers = document.querySelectorAll(
+        '.social-proof-grid, .features-grid, .testimonials-grid, .pricing-grid'
+      );
+
+      const staggerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const items = entry.target.querySelectorAll('.stagger-item');
+            items.forEach((item, i) => {
+              setTimeout(() => {
+                item.classList.add('visible');
+              }, i * 100);
+            });
+            staggerObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      staggerContainers.forEach(c => staggerObserver.observe(c));
+
+      // Counter animation
+      const counterElements = document.querySelectorAll('.counter');
+      const counterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseInt(el.dataset.target, 10);
+            if (!target) return;
+
+            const duration = 2000;
+            const startTime = performance.now();
+
+            function easeOutCubic(t) {
+              return 1 - Math.pow(1 - t, 3);
+            }
+
+            function updateCounter(currentTime) {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easedProgress = easeOutCubic(progress);
+              const current = Math.round(easedProgress * target);
+
+              if (target >= 1000) {
+                el.textContent = current.toLocaleString('pt-BR');
+              } else {
+                el.textContent = current;
+              }
+
+              if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+              }
+            }
+
+            requestAnimationFrame(updateCounter);
+            counterObserver.unobserve(el);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      counterElements.forEach(el => counterObserver.observe(el));
+
+      // Parallax effect on scroll
+      const parallaxImages = document.querySelectorAll('.parallax-img');
+      const heroImg = document.querySelector('.hero-image');
+      let ticking = false;
+      let heroAnimDone = false;
+
+      setTimeout(function() { heroAnimDone = true; }, 2800);
+
+      function handleParallax() {
+        parallaxImages.forEach(function(img) {
+          const rect = img.getBoundingClientRect();
+          const windowHeight = window.innerHeight;
+
+          if (rect.top < windowHeight && rect.bottom > 0) {
+            const scrollPercent = (windowHeight - rect.top) / (windowHeight + rect.height);
+            const isHero = img === heroImg;
+            const intensity = isHero ? 20 : 30;
+            const baseScale = isHero ? 1 : 1.03;
+            const translateY = (scrollPercent - 0.5) * intensity;
+
+            if (isHero && !heroAnimDone) return;
+
+            img.style.transform = 'translateY(' + translateY + 'px) scale(' + baseScale + ')';
+          }
+        });
+        ticking = false;
+      }
+
+      window.addEventListener('scroll', function() {
+        if (!ticking) {
+          requestAnimationFrame(handleParallax);
+          ticking = true;
+        }
+      }, { passive: true });
+
+      // FAQ accordion
+      document.querySelectorAll('.faq-question').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const item = this.parentElement;
+          const isActive = item.classList.contains('active');
+
+          document.querySelectorAll('.faq-item.active').forEach(activeItem => {
+            activeItem.classList.remove('active');
+          });
+
+          if (!isActive) {
+            item.classList.add('active');
+          }
+        });
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href === '#') return;
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            const offset = navbar.offsetHeight + 20;
+            const top = target.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top, behavior: 'smooth' });
+          }
+        });
+      });
+
+      // Mobile menu toggle
+      const mobileToggle = document.getElementById('mobileToggle');
+      const navLinks = document.querySelector('.navbar-links');
+
+      if (mobileToggle) {
+        mobileToggle.addEventListener('click', function() {
+          navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+          navLinks.style.position = 'absolute';
+          navLinks.style.top = '100%';
+          navLinks.style.left = '0';
+          navLinks.style.right = '0';
+          navLinks.style.background = 'rgba(255,255,255,0.95)';
+          navLinks.style.backdropFilter = 'blur(20px)';
+          navLinks.style.flexDirection = 'column';
+          navLinks.style.padding = '24px';
+          navLinks.style.gap = '16px';
+          navLinks.style.borderBottom = '1px solid rgba(0,0,0,0.05)';
+        });
+      }
+
+    })();
+  </script>
+
+</body>
+</html>
