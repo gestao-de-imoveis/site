@@ -100,14 +100,14 @@
       opacity: 0;
       transform: translateX(-10px);
       filter: blur(2px);
-      animation: navItemIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: navItemIn 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
-    .navbar .navbar-logo { animation-delay: 0.20s; }
-    .navbar .navbar-links li:nth-child(1) { animation-delay: 0.40s; }
-    .navbar .navbar-links li:nth-child(2) { animation-delay: 0.60s; }
-    .navbar .navbar-links li:nth-child(3) { animation-delay: 0.80s; }
-    .navbar .navbar-links li:nth-child(4) { animation-delay: 1s; }
-    .navbar .navbar-cta { animation-delay: 1.2s; }
+    .navbar .navbar-logo { animation-delay: 0.35s; }
+    .navbar .navbar-links li:nth-child(1) { animation-delay: 0.80s; }
+    .navbar .navbar-links li:nth-child(2) { animation-delay: 1.25s; }
+    .navbar .navbar-links li:nth-child(3) { animation-delay: 1.70s; }
+    .navbar .navbar-links li:nth-child(4) { animation-delay: 2.15s; }
+    .navbar .navbar-cta { animation-delay: 2.60s; }
 
     @keyframes navItemIn {
       to {
@@ -150,7 +150,7 @@
       min-height: 100vh;
       padding: 132px 0 72px;
       overflow: hidden;
-      background: #f3f7f5;
+      background: var(--white);
     }
     .hero-bg {
       position: absolute;
@@ -165,11 +165,15 @@
       background-image: url("images/Gemini_Generated_Image_xgt6p6xgt6p6xgt6.png");
       background-size: cover;
       background-position: center 27%;
-      transform: scale(1.05);
+      transform: scale(1.1);
       filter: saturate(1.04) contrast(1.04);
-      animation: heroPhotoIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s,
-                 heroAmbientFloat 12s ease-in-out infinite 1.8s;
-      will-change: transform;
+      opacity: 0;
+      animation: none;
+      will-change: transform, opacity;
+    }
+    body.hero-typed-first-complete .hero-bg-photo {
+      animation: heroPhotoIn 6.2s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+                 heroAmbientFloat 12s ease-in-out infinite 6.4s;
     }
     .hero-bg-overlay {
       position: absolute;
@@ -372,6 +376,27 @@
       line-height: 1;
     }
 
+    /* Intro da hero: mostra somente a frase até completar a primeira digitação */
+    .hero-bg {
+      transition: opacity 4.8s cubic-bezier(0.22, 1, 0.36, 1), visibility 4.8s ease;
+    }
+    .hero-ctas,
+    .hero-metrics {
+      transition: opacity 0.55s ease, visibility 0.55s ease;
+    }
+    body:not(.hero-typed-first-complete) .hero-bg,
+    body:not(.hero-typed-first-complete) .hero-ctas,
+    body:not(.hero-typed-first-complete) .hero-metrics {
+      opacity: 0;
+      visibility: hidden;
+    }
+    body:not(.hero-typed-first-complete) .hero-bg-photo {
+      opacity: 0;
+    }
+    body:not(.hero-typed-first-complete) .hero-ctas {
+      pointer-events: none;
+    }
+
     @keyframes heroWordIn {
       to { opacity: 1; transform: translateY(0); }
     }
@@ -391,8 +416,8 @@
       }
     }
     @keyframes heroPhotoIn {
-      from { transform: scale(1.1); }
-      to { transform: scale(1.05); }
+      from { opacity: 0; transform: scale(1.1); }
+      to { opacity: 1; transform: scale(1.05); }
     }
     @keyframes heroFadeIn {
       to { opacity: 1; }
@@ -1708,14 +1733,12 @@
           ]
         ];
 
-        var typeSpeed = 55;
+        var typeSpeed = 65;
         var eraseSpeed = 55;
         var pauseAfterType = 1700;
-        var pauseAfterTypeFirstPhrase = pauseAfterType; // mantido; a animação mobile será disparada no fim do typing
         var pauseAfterErase = 400;
         var startDelay = 600;
         var phraseIdx = 0;
-        var mobileFirstAnimLeadAfterTyping = 200; // dispara um pouco após terminar o typing (sem mexer no pause)
 
         function getFullText(parts) {
           return parts.reduce(function(a, p) { return a + p.text; }, '');
@@ -1737,12 +1760,17 @@
           return html;
         }
 
-        function typePhrase(parts, cb, cbDelay, onTypedComplete) {
+        function typePhrase(parts, cb, cbDelay, onTypedComplete, onTypedNearComplete) {
           var full = getFullText(parts);
           var i = 0;
+          var nearCompleteFired = false;
           function step() {
             i++;
             el.innerHTML = buildHTML(parts, i);
+            if (!nearCompleteFired && typeof onTypedNearComplete === 'function' && i >= Math.max(1, full.length - 5)) {
+              nearCompleteFired = true;
+              onTypedNearComplete();
+            }
             if (i < full.length) {
               setTimeout(step, typeSpeed);
             } else {
@@ -1775,12 +1803,10 @@
               phraseIdx = (phraseIdx + 1) % phrases.length;
               cycle();
             });
-          }, undefined, phraseIdx === 0 ? function() {
+          }, undefined, undefined, phraseIdx === 0 ? function() {
             if (!firstPhraseDone) {
               firstPhraseDone = true;
-              setTimeout(function() {
-                document.body.classList.add('hero-typed-first-complete');
-              }, mobileFirstAnimLeadAfterTyping);
+              document.body.classList.add('hero-typed-first-complete');
             }
           } : undefined);
         }
