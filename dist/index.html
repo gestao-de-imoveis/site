@@ -100,14 +100,14 @@
       opacity: 0;
       transform: translateX(-10px);
       filter: blur(2px);
-      animation: navItemIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      animation: navItemIn 2.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
-    .navbar .navbar-logo { animation-delay: 0.20s; }
-    .navbar .navbar-links li:nth-child(1) { animation-delay: 0.40s; }
-    .navbar .navbar-links li:nth-child(2) { animation-delay: 0.60s; }
-    .navbar .navbar-links li:nth-child(3) { animation-delay: 0.80s; }
-    .navbar .navbar-links li:nth-child(4) { animation-delay: 1s; }
-    .navbar .navbar-cta { animation-delay: 1.2s; }
+    .navbar .navbar-logo { animation-delay: 0.35s; }
+    .navbar .navbar-links li:nth-child(1) { animation-delay: 0.80s; }
+    .navbar .navbar-links li:nth-child(2) { animation-delay: 1.25s; }
+    .navbar .navbar-links li:nth-child(3) { animation-delay: 1.70s; }
+    .navbar .navbar-links li:nth-child(4) { animation-delay: 2.15s; }
+    .navbar .navbar-cta { animation-delay: 2.60s; }
 
     @keyframes navItemIn {
       to {
@@ -150,7 +150,7 @@
       min-height: 100vh;
       padding: 132px 0 72px;
       overflow: hidden;
-      background: #f3f7f5;
+      background: var(--white);
     }
     .hero-bg {
       position: absolute;
@@ -165,11 +165,15 @@
       background-image: url("/assets/Gemini_Generated_Image_xgt6p6xgt6p6xgt6-B_NBM2AY.png");
       background-size: cover;
       background-position: center 27%;
-      transform: scale(1.05);
+      transform: scale(1.1);
       filter: saturate(1.04) contrast(1.04);
-      animation: heroPhotoIn 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.2s,
-                 heroAmbientFloat 12s ease-in-out infinite 1.8s;
-      will-change: transform;
+      opacity: 0;
+      animation: none;
+      will-change: transform, opacity;
+    }
+    body.hero-typed-first-complete .hero-bg-photo {
+      animation: heroPhotoIn 6.2s cubic-bezier(0.22, 1, 0.36, 1) forwards,
+                 heroAmbientFloat 12s ease-in-out infinite 6.4s;
     }
     .hero-bg-overlay {
       position: absolute;
@@ -376,6 +380,27 @@
       line-height: 1;
     }
 
+    /* Intro da hero: mostra somente a frase até completar a primeira digitação */
+    .hero-bg {
+      transition: opacity 4.8s cubic-bezier(0.22, 1, 0.36, 1), visibility 4.8s ease;
+    }
+    .hero-ctas,
+    .hero-metrics {
+      transition: opacity 0.55s ease, visibility 0.55s ease;
+    }
+    body:not(.hero-typed-first-complete) .hero-bg,
+    body:not(.hero-typed-first-complete) .hero-ctas,
+    body:not(.hero-typed-first-complete) .hero-metrics {
+      opacity: 0;
+      visibility: hidden;
+    }
+    body:not(.hero-typed-first-complete) .hero-bg-photo {
+      opacity: 0;
+    }
+    body:not(.hero-typed-first-complete) .hero-ctas {
+      pointer-events: none;
+    }
+
     @keyframes heroWordIn {
       to { opacity: 1; transform: translateY(0); }
     }
@@ -395,8 +420,8 @@
       }
     }
     @keyframes heroPhotoIn {
-      from { transform: scale(1.1); }
-      to { transform: scale(1.05); }
+      from { opacity: 0; transform: scale(1.1); }
+      to { opacity: 1; transform: scale(1.05); }
     }
     @keyframes heroFadeIn {
       to { opacity: 1; }
@@ -722,7 +747,7 @@
       font-size: 18px; font-weight: 700; color: var(--gray-400);
     }
     .pricing-amount {
-      font-size: 48px; font-weight: 900; color: var(--black);
+      font-size: 40px; font-weight: 900; color: var(--black);
       letter-spacing: -2px; line-height: 1;
     }
     .pricing-period {
@@ -1000,6 +1025,17 @@
       }
 
       .hero { padding: 108px 0 56px; min-height: 92vh; }
+      .hero-bg-overlay {
+        background:
+          linear-gradient(90deg, rgba(255,255,255,0.62) 0%, rgba(255,255,255,0.52) 30%, rgba(255,255,255,0.36) 48%, rgba(255,255,255,0.18) 62%, rgba(255,255,255,0) 78%),
+          linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 55%, rgba(255,255,255,0.12) 100%);
+      }
+      .hero-bg-vignette {
+        background: radial-gradient(ellipse at 78% 32%, rgba(255,255,255,0.1), transparent 44%);
+      }
+      .hero-glow {
+        opacity: 0.6;
+      }
       .hero-inner { min-height: calc(92vh - 64px); }
       .hero-content { max-width: 100%; width: 100%; }
       .hero-ctas { flex-direction: column; margin-top: 48px; }
@@ -1199,7 +1235,7 @@
             <li><span class="check">✓</span> Dashboards estratégicos em tempo real</li>
             <li><span class="check">✓</span> Controle de pagamentos automatizado</li>
             <li><span class="check">✓</span> Gestão de inadimplência com alertas</li>
-            <li><span class="check">✓</span> CRM integrado para moradores</li>
+            <li><span class="check">✓</span> Controle de gastos</li>
             <li><span class="check">✓</span> Relatórios automatizados</li>
           </ul>
         </div>
@@ -1362,7 +1398,7 @@
       <div class="section-header reveal">
         <span class="section-label">Inteligência completa</span>
         <h2 class="section-title">Relacionamento profissional e relatórios sem esforço</h2>
-        <p class="section-desc">CRM integrado para moradores, histórico de interações, contratos e relatórios completos com lucro, inadimplência e performance.</p>
+        <p class="section-desc">Controle de gastos, histórico de interações, contratos e relatórios completos com lucro, inadimplência e performance.</p>
       </div>
 
       <div class="feature-row">
@@ -1526,16 +1562,16 @@
           <div class="pricing-desc">Ideal para operações enxutas que precisam de controle completo.</div>
           <div class="pricing-price">
             <span class="pricing-currency">R$</span>
-            <span class="pricing-amount">97</span>
+            <span class="pricing-amount">97,90</span>
             <span class="pricing-period">/mês</span>
           </div>
           <ul class="pricing-features">
-            <li><span class="pf-check">✓</span> Até 10 unidades</li>
+            <li><span class="pf-check">✓</span> Apenas 1 unidade</li>
             <li><span class="pf-check">✓</span> Controle de pagamentos</li>
             <li><span class="pf-check">✓</span> Gestão de inadimplência</li>
             <li><span class="pf-check">✓</span> Cobrança automática</li>
             <li><span class="pf-check">✓</span> Painel do morador</li>
-            <li><span class="pf-check">✓</span> CRM integrado</li>
+            <li><span class="pf-check">✓</span> Controle de gastos</li>
             <li><span class="pf-check">✓</span> Relatórios avançados</li>
             <li><span class="pf-check">✓</span> Suporte prioritário</li>
           </ul>
@@ -1547,16 +1583,16 @@
           <div class="pricing-desc">Perfeito para quem está expandindo a operação com mais unidades.</div>
           <div class="pricing-price">
             <span class="pricing-currency">R$</span>
-            <span class="pricing-amount">129</span>
+            <span class="pricing-amount">127,90</span>
             <span class="pricing-period">/mês</span>
           </div>
           <ul class="pricing-features">
-            <li><span class="pf-check">✓</span> Até 25 unidades</li>
+            <li><span class="pf-check">✓</span> Até 5 unidades</li>
             <li><span class="pf-check">✓</span> Controle de pagamentos</li>
             <li><span class="pf-check">✓</span> Cobrança automática</li>
             <li><span class="pf-check">✓</span> Gestão de inadimplência</li>
             <li><span class="pf-check">✓</span> Painel do morador</li>
-            <li><span class="pf-check">✓</span> CRM integrado</li>
+            <li><span class="pf-check">✓</span> Controle de gastos</li>
             <li><span class="pf-check">✓</span> Relatórios avançados</li>
             <li><span class="pf-check">✓</span> Suporte prioritário</li>
           </ul>
@@ -1568,16 +1604,16 @@
           <div class="pricing-desc">Feito para carteiras maiores que precisam escalar sem perder controle.</div>
           <div class="pricing-price">
             <span class="pricing-currency">R$</span>
-            <span class="pricing-amount">197</span>
+            <span class="pricing-amount">197,90</span>
             <span class="pricing-period">/mês</span>
           </div>
           <ul class="pricing-features">
-            <li><span class="pf-check">✓</span> 25+ unidades</li>
+            <li><span class="pf-check">✓</span> Mais de 5 unidades</li>
             <li><span class="pf-check">✓</span> Controle de pagamentos</li>
             <li><span class="pf-check">✓</span> Cobrança automática</li>
             <li><span class="pf-check">✓</span> Gestão de inadimplência</li>
             <li><span class="pf-check">✓</span> Painel do morador</li>
-            <li><span class="pf-check">✓</span> CRM integrado</li>
+            <li><span class="pf-check">✓</span> Controle de gastos</li>
             <li><span class="pf-check">✓</span> Relatórios avançados</li>
             <li><span class="pf-check">✓</span> Suporte prioritário</li>
           </ul>
@@ -1647,7 +1683,7 @@
             <span class="faq-icon">+</span>
           </button>
           <div class="faq-answer">
-            <p>Com certeza. Você pode começar com o plano Starter para até 10 unidades, evoluir para o Pro até 25 unidades ou usar o Business para 25+ unidades. O sistema entrega os mesmos benefícios em todos os planos e acompanha o crescimento da sua operação.</p>
+            <p>Com certeza. Você pode começar com o plano Starter para apenas 1 unidade, evoluir para o Pro até 5 unidades ou usar o Business para mais de 5 unidades. O sistema entrega os mesmos benefícios em todos os planos e acompanha o crescimento da sua operação.</p>
           </div>
         </div>
       </div>
@@ -1742,14 +1778,12 @@
           ]
         ];
 
-        var typeSpeed = 55;
+        var typeSpeed = 65;
         var eraseSpeed = 55;
-        var pauseAfterType = 1800;
-        var pauseAfterTypeFirstPhrase = pauseAfterType; // mantido; a animação mobile será disparada no fim do typing
+        var pauseAfterType = 1700;
         var pauseAfterErase = 400;
         var startDelay = 600;
         var phraseIdx = 0;
-        var mobileFirstAnimLeadAfterTyping = 200; // dispara um pouco após terminar o typing (sem mexer no pause)
 
         function getFullText(parts) {
           return parts.reduce(function(a, p) { return a + p.text; }, '');
@@ -1771,12 +1805,17 @@
           return html;
         }
 
-        function typePhrase(parts, cb, cbDelay, onTypedComplete) {
+        function typePhrase(parts, cb, cbDelay, onTypedComplete, onTypedNearComplete) {
           var full = getFullText(parts);
           var i = 0;
+          var nearCompleteFired = false;
           function step() {
             i++;
             el.innerHTML = buildHTML(parts, i);
+            if (!nearCompleteFired && typeof onTypedNearComplete === 'function' && i >= Math.max(1, full.length - 5)) {
+              nearCompleteFired = true;
+              onTypedNearComplete();
+            }
             if (i < full.length) {
               setTimeout(step, typeSpeed);
             } else {
@@ -1809,12 +1848,10 @@
               phraseIdx = (phraseIdx + 1) % phrases.length;
               cycle();
             });
-          }, undefined, phraseIdx === 0 ? function() {
+          }, undefined, undefined, phraseIdx === 0 ? function() {
             if (!firstPhraseDone) {
               firstPhraseDone = true;
-              setTimeout(function() {
-                document.body.classList.add('hero-typed-first-complete');
-              }, mobileFirstAnimLeadAfterTyping);
+              document.body.classList.add('hero-typed-first-complete');
             }
           } : undefined);
         }
